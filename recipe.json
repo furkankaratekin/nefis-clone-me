@@ -1,0 +1,8 @@
+{
+    "name" : "isim",
+    "picture" :"x.jpg",
+    "category" :"category1",
+    "ingredients" :[" a *2" , " b*3" , "c*4"],
+    "recipe" : "hazırlanıs icin uzun yazı",
+    "content_photos:" :["a.jpg" , "b.jpg" , "c.jpg"]
+}

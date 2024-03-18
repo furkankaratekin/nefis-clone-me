@@ -1,0 +1,35 @@
+[
+  {
+    "name": "Ramazan Menusu",
+    "recipe_ids": [
+      "65f6b284b1c14dd0189e49c1",
+      "65f6b284b1c14dd0189e49c2",
+      "65f6b284b1c14dd0189e49c2",
+      "65f6b284b1c14dd0189e49c3"
+    ],
+    "content": "contnet",
+    "popular" : false
+  },
+  {
+    "name": "Ramazan Menusu",
+    "recipe_ids": [
+      "65f6b284b1c14dd0189e49c1",
+      "65f6b284b1c14dd0189e49c2",
+      "65f6b284b1c14dd0189e49c2",
+      "65f6b284b1c14dd0189e49c3"
+    ],
+    "content": "content1",
+    "popular": false
+  },
+  {
+    "name": "Et Menusu",
+    "recipe_ids": [
+      "65f6b284b1c14dd0189e49c1",
+      "65f6b284b1c14dd0189e49c2",
+      "65f6b284b1c14dd0189e49c2",
+      "65f6b284b1c14dd0189e49c3"
+    ],
+    "content": "content1",
+    "popular": true
+  }
+]
