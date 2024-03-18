@@ -37,8 +37,84 @@ export const addComment = async (req, res) => {
   }
 };
 
+// Yorum güncelleme fonksiyonu
+export const updateComment = async (req, res) => {
+  const { commentId, newComment } = req.body;
 
+  try {
+    // Güncellenmek istenen yorumu bul
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
 
+    // Token ile gelen kullanıcı bilgilerini kullanarak kullanıcıyı bul
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Yorumun sahibi ile isteği yapan kullanıcı aynı mı kontrol et
+    if (comment.user_username !== user.username) {
+      // Kullanıcılar eşleşmiyorsa yetki hatası ver
+      return res
+        .status(403)
+        .json({ message: "You can only update your own comments" });
+    }
+
+    // Yorumu güncelle
+    comment.comment = newComment; // Yorum metnini güncelle
+    comment.updatedAt = new Date(); // Güncelleme tarihini şu anki zaman olarak ayarla
+    await comment.save(); // Değişiklikleri kaydet
+
+    // Güncellenen yorumu dön
+    res.status(200).json({
+      id: comment.id,
+      recipe_id: comment.recipe_id,
+      user_username: user.username,
+      user_profile_picture: user.profilePicture,
+      comment: comment.comment, // Güncellenen yorum metni
+      createdAt: comment.createdAt,
+      updatedAt: comment.updatedAt,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+//Yorumu sil
+export const deleteComment = async (req, res) => {
+  const { commentId } = req.params; // Yorumun ID'sini URL parametresinden al
+
+  try {
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+
+    // Token ile gelen kullanıcı bilgilerini kullanarak kullanıcıyı bul
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Yorumun sahibi ile isteği yapan kullanıcı aynı mı kontrol et
+    if (comment.user_username !== user.username) {
+      // Kullanıcılar eşleşmiyorsa yetki hatası ver
+      return res
+        .status(403)
+        .json({ message: "You can only delete your own comments" });
+    }
+
+    // Yorumu sil
+    await Comment.findByIdAndDelete(commentId);
+
+    // Başarı yanıtı dön
+    res.status(200).json({ message: "Comment deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 
 

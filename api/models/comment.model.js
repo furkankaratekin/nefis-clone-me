@@ -5,7 +5,6 @@ const commentSchema = new mongoose.Schema(
     recipe_id: {
       type: mongoose.Schema.Types.ObjectId, // Tarif ID'si, doğru bir ObjectId olmalı
       ref: "Recipe",
-      required: true,
     },
     user_username: {
       type: String, // Kullanıcı adı artık bir string
@@ -17,7 +16,6 @@ const commentSchema = new mongoose.Schema(
     },
     comment: {
       type: String,
-      required: true,
     },
   },
   { timestamps: true }
