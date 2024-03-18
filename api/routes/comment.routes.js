@@ -18,3 +18,4 @@ router.put("/update-comment", verifyToken, updateComment);
 router.delete("/delete-comment/:commentId", verifyToken, deleteComment);
 
 export default router;
+//http://localhost:5000/api/comment
