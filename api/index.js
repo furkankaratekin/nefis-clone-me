@@ -7,6 +7,7 @@ import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import recipeRoutes from './routes/recipe.routes.js';
 import menuRoutes from './routes/menu.routes.js';
+import commentRoutes from './routes/comment.routes.js';
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/recipe", recipeRoutes);
 app.use("/api/menu", menuRoutes);
+app.use("/api/comment",commentRoutes)
 
 
 app.use((err, req, res, next) => {
