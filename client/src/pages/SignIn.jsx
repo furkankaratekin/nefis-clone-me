@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   signInStart,
@@ -7,6 +7,8 @@ import {
 } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import OAuth from "../components/OAuth";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -32,20 +34,30 @@ export default function SignIn() {
       const data = await res.json();
       if (data.success === false) {
         dispatch(signInFailure(data));
+        toast.error(data.message || "Sign in failed");
         return;
       }
       dispatch(signInSuccess(data));
+      toast.success("Signed in successfully");
       navigate("/");
     } catch (error) {
       dispatch(signInFailure(error));
+      toast.error(error.message || "An error occurred");
     }
   };
+
+    useEffect(() => {
+      // Local storage'da signupSuccess kontrolü
+      if (localStorage.getItem("signupSuccess")) {
+        toast.success("Giriş yapıldı");
+        localStorage.removeItem("signupSuccess");
+      }
+    }, []);
+
   return (
     <div className="flex flex-col min-h-screen">
-      <div
-        className="flex-grow
-      "
-      >
+      <ToastContainer />
+      <div className="flex-grow">
         <div className="p-3 max-w-lg mx-auto">
           <h1 className="text-3xl text-center font-semibold my-7">Sign In</h1>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
