@@ -4,18 +4,14 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; // Bu satırı genellikle ana componentinize eklemeniz daha iyi olur
-import { current } from "@reduxjs/toolkit";
-
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Bu satırı genellikle ana componentinize eklemeniz daha iyi olur
 
 const RecipeContent = () => {
   const [recipe, setRecipe] = useState(null);
   const { id } = useParams(); // URL'den ID'yi almak için useParams hook'unu kullanın
-  const [isFavorited, setIsFavorited] = useState(false)//Dolu boş kalp yapan snippet
-    const { currentUser, loading, error } = useSelector((state) => state.user);
-
+  const [isFavorited, setIsFavorited] = useState(false); //Dolu boş kalp yapan snippet
+  const { currentUser} = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchRecipeDetails = async () => {
@@ -36,18 +32,52 @@ const RecipeContent = () => {
     return <p>Yükleniyor...</p>;
   }
 
-  //Kalp ikonuna tıklamada değişme 
-  const toggleFavorite = () => {
-    setIsFavorited(!isFavorited); // Mevcut durumun tersini ayarla
-    // Favori durumuna göre uygun toast mesajını göster
-    if (!isFavorited) {
+  //Kalp ikonuna tıklamada değişme
+const toggleFavorite = async () => {
+  // Mevcut favori durumunu değiştir
+  setIsFavorited(!isFavorited);
+
+  if (!isFavorited) {
+    // Favorilere ekleme işlemi
+    try {
+      // API URL'i, kullanıcının ID'si ile birlikte dinamik olarak oluşturuluyor
+      const apiUrl = `http://localhost:5000/api/recipe/favorites/${currentUser._id}/add`;
+
+      // Axios POST isteği için gönderilecek olan veri
+      const postData = {
+        recipeId: recipe._id, // recipe._id değerini göndermek için kullanılıyor
+      };
+      // Axios ile POST isteği yapılıyor ve veri gönderiliyor
+   await axios
+       .post(apiUrl, postData, {
+         headers: {
+           Authorization: `Bearer ${currentUser.token}`, // Bearer eklenmiş olabilir
+           Accept: "application/json",
+           "Content-Type": "application/json",
+         },
+       })
+      // Başarılı toast mesajı
       toast.success("Deftere Eklendi!");
-    } else {
-      toast.error("Defterden Kaldırıldı!");
+    } catch (error) {
+      // Hata durumunda konsola ve kullanıcıya hata mesajı yazdırılıyor
+      console.error("Favorilere ekleme hatası:", error);
+      toast.error("Favorilere ekleme işlemi başarısız oldu.");
+      // Ekleme işlemi başarısız olursa, favori durumu eski haline getiriliyor
+      setIsFavorited(!isFavorited);
     }
-  };
-  console.log(currentUser._id)
-  console.log(recipe._id)
+  } else {
+    // Favorilerden çıkarma işlemi için şimdilik bir işlem yapılmıyor
+    // Not: Bu kısım gelecekte doldurulacak
+    toast.error("Defterden Kaldırıldı!");
+  }
+};
+
+
+
+  console.log(currentUser._id);
+  console.log(recipe._id);
+  console.log(currentUser.token);
+
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">{recipe.name}</h2>
@@ -105,6 +135,3 @@ const RecipeContent = () => {
 };
 
 export default RecipeContent;
-
-
-
