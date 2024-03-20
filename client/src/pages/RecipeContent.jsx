@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // Bu satırı genellikle ana componentinize eklemeniz daha iyi olur
+import { current } from "@reduxjs/toolkit";
 
 
 
@@ -12,7 +14,8 @@ const RecipeContent = () => {
   const [recipe, setRecipe] = useState(null);
   const { id } = useParams(); // URL'den ID'yi almak için useParams hook'unu kullanın
   const [isFavorited, setIsFavorited] = useState(false)//Dolu boş kalp yapan snippet
-  
+    const { currentUser, loading, error } = useSelector((state) => state.user);
+
 
   useEffect(() => {
     const fetchRecipeDetails = async () => {
@@ -43,7 +46,8 @@ const RecipeContent = () => {
       toast.error("Defterden Kaldırıldı!");
     }
   };
-
+  console.log(currentUser._id)
+  console.log(recipe._id)
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">{recipe.name}</h2>
