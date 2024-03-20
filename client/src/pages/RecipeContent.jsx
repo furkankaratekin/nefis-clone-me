@@ -40,37 +40,56 @@ const toggleFavorite = async () => {
   if (!isFavorited) {
     // Favorilere ekleme işlemi
     try {
-      // API URL'i, kullanıcının ID'si ile birlikte dinamik olarak oluşturuluyor
       const apiUrl = `http://localhost:5000/api/recipe/favorites/${currentUser._id}/add`;
-
-      // Axios POST isteği için gönderilecek olan veri
       const postData = {
-        recipeId: recipe._id, // recipe._id değerini göndermek için kullanılıyor
+        recipeId: recipe._id,
       };
-      // Axios ile POST isteği yapılıyor ve veri gönderiliyor
-   await axios
-       .post(apiUrl, postData, {
-         headers: {
-           Authorization: `Bearer ${currentUser.token}`, // Bearer eklenmiş olabilir
-           Accept: "application/json",
-           "Content-Type": "application/json",
-         },
-       })
-      // Başarılı toast mesajı
+      await axios.post(apiUrl, postData, {
+        headers: {
+          Authorization: `Bearer ${currentUser.token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
       toast.success("Deftere Eklendi!");
     } catch (error) {
-      // Hata durumunda konsola ve kullanıcıya hata mesajı yazdırılıyor
       console.error("Favorilere ekleme hatası:", error);
       toast.error("Favorilere ekleme işlemi başarısız oldu.");
-      // Ekleme işlemi başarısız olursa, favori durumu eski haline getiriliyor
       setIsFavorited(!isFavorited);
     }
   } else {
-    // Favorilerden çıkarma işlemi için şimdilik bir işlem yapılmıyor
-    // Not: Bu kısım gelecekte doldurulacak
-    toast.error("Defterden Kaldırıldı!");
+    // Favorilerden çıkarma işlemi
+    try {
+      // Favorilerden çıkarma işlemi için API URL'i
+      const apiUrl = `http://localhost:5000/api/recipe/favorites/${currentUser._id}/remove`;
+
+      // Axios DELETE isteği için gönderilecek olan veri
+      const postData = {
+        recipeId: recipe._id, // recipe._id değerini göndermek için kullanılıyor
+      };
+
+      // Axios ile DELETE isteği yapılıyor ve veri gönderiliyor
+      await axios.delete(apiUrl, {
+        data: postData, // DELETE metodunda veri 'data' özelliği ile gönderilmeli
+        headers: {
+          Authorization: `Bearer ${currentUser.token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+
+      // Başarılı toast mesajı
+      toast.success("Defterden Kaldırıldı!");
+    } catch (error) {
+      // Hata durumunda konsola ve kullanıcıya hata mesajı yazdırılıyor
+      console.error("Favorilerden çıkarma hatası:", error);
+      toast.error("Favorilerden çıkarma işlemi başarısız oldu.");
+      // Çıkarma işlemi başarısız olursa, favori durumu eski haline getiriliyor
+      setIsFavorited(!isFavorited);
+    }
   }
 };
+
 
 
 
