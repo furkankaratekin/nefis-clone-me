@@ -31,9 +31,6 @@ export default function Profile() {
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const { currentUser, loading, error } = useSelector((state) => state.user);
-  const [listFavorites, setListFavorites] = useState([]);
-  const [listWebsites, setListWebsites] = useState([]);
-  const [filteredWebsites, setFilteredWebsites] = useState([]);
 
   useEffect(() => {
     if (image) {
