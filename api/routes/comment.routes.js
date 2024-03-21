@@ -2,7 +2,8 @@ import express from "express";
 import {
   addComment,
   updateComment,
-  deleteComment
+  deleteComment,
+  getComments
 } from "../controllers/comment.controller.js";
 import { verifyToken } from "../utils/verifyUser.js";
 
@@ -16,6 +17,9 @@ router.put("/update-comment", verifyToken, updateComment);
 
 //Yorumu sil
 router.delete("/delete-comment/:commentId", verifyToken, deleteComment);
+
+//Yorumları göster
+router.get("/list-comment/:recipe_id" ,getComments )
 
 export default router;
 //http://localhost:5000/api/comment

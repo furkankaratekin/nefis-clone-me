@@ -117,6 +117,23 @@ export const deleteComment = async (req, res) => {
 };
 
 
+//yorumları göster
+export const getComments = async (req, res, next) => {
+  const { recipe_id } = req.params; // Tarifin ID'sini URL parametresinden al
+  try {
+    // Belirtilen tarif ID'sine sahip tüm yorumları bul
+    const comments = await Comment.find({ recipe_id })
+      .select("user_username user_profile_picture comment createdAt updatedAt")
+      .sort({ createdAt: -1 });
+
+    // Yorum listesini JSON formatında döndür
+    res.json(comments);
+  } catch (error) {
+    // Hata olması durumunda bir sonraki middleware'e hatayı ilet
+    next(error);
+  }
+};
+
 
 
 
