@@ -115,9 +115,7 @@ export default function Profile() {
 
   useEffect(() => {
     axios
-      .get(
-        "http://localhost:5000/api/recipe/favorites/65fc001d04db3579d60ba76a"
-      )
+      .get(`http://localhost:5000/api/recipe/favorites/${currentUser._id}`)
       .then((data) => {
         console.log(data);
         setFavorites(data?.data);
