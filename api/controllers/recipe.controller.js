@@ -202,6 +202,31 @@ export const removeFavoriteRecipe = async (req, res, next) => {
   }
 };
 
+//Favorileri listele
+export const listFavorites = async (req,res,next) => {
+  const {userId} = req.params;//URL'den kullanıcının ID'si alınır.
+  try{
+    // İlk olarak, belirtilen kullanıcının veritabanında olup olmadığını kontrol edin.
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).send({ message: "Kullanıcı bulunamadı" });
+    }
+
+    // Kullanıcının favori tariflerinin ID'lerini alın.
+    const favoritesRecipesIds = user.favorites_recipes;
+
+    // Bu ID'ler kullanılarak favori tariflerin tam listesi alınır.
+    const favoritesRecipes = await Recipe.find({
+      _id: { $in: favoritesRecipesIds },
+    });
+
+    // Kullanıcının favori tariflerini döndür
+    return res.status(200).json(favoritesRecipes);
+  }catch(error){
+    next(error);
+  }
+}
+
 
 // Fonksiyonu dışa aktarma (İsteğe bağlı)
 export { getAllRecipes,getRecipeById};

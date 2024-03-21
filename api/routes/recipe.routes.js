@@ -6,7 +6,8 @@ import {
   updateRecipe,
   deleteRecipe,
   addFavoriteRecipe,
-  removeFavoriteRecipe
+  removeFavoriteRecipe,
+  listFavorites
 } from "../controllers/recipe.controller.js";
 import { verifyToken } from "../utils/verifyUser.js";
 
@@ -32,6 +33,9 @@ router.post("/favorites/:userId/add", verifyToken, addFavoriteRecipe);
 
 //Favorilerden Silme
 router.delete("/favorites/:userId/remove", verifyToken, removeFavoriteRecipe);
+
+//Favorileri Listeleme
+router.get("/favorites/:userId", verifyToken, listFavorites )
 
 
 
