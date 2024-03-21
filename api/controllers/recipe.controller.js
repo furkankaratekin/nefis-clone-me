@@ -22,7 +22,7 @@ const getRecipeById = async (req, res) => {
 
     // Doğrudan _id değerini kullanarak tarifi bul
     const recipe = await Recipe.findOne({ _id: id });
-    console.log(id); // id değerini konsola yazdır
+    //console.log(id); // id değerini konsola yazdır
 
     // Tarif bulunamazsa, 404 hatası döndür
     if (!recipe) {
@@ -66,7 +66,7 @@ export const addRecipe = async (req ,res, next) =>{
       calorie,
       createdBy: req.user.id, // Kullanıcının ID'si, tarifi kimin oluşturduğunu belirlemek için
     });
-    console.log(req.user.id)
+    //console.log(req.user.id)
     /* eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZjdlNzE4MTgwN2ExZWUyODZjMmJjNSIsImlhdCI6MTcxMDc0NTM3NywiZXhwIjoxNzEwNzQ4OTc3fQ.OnJIrUiBwx8UNkgQ2g5B0bUNyv6UVmzkJylufu4bi0U */
 
     // Yeni tarifi veritabanına kaydet

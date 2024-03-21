@@ -6,7 +6,6 @@ export const verifyToken = (req, res, next) => {
   if (authHeader) {
    
     const token = authHeader.split(" ")[1];
-    console.log("sdfjsdf" + authHeader);
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) {

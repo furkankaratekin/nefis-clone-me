@@ -95,9 +95,9 @@ const RecipeContent = () => {
     }
   };
 
-  console.log(currentUser._id);
+ /*  console.log(currentUser._id);
   console.log(recipe._id);
-  console.log(currentUser.token);
+  console.log(currentUser.token); */
 
   return (
     <div>
