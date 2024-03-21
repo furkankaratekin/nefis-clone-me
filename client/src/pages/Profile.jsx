@@ -31,6 +31,7 @@ export default function Profile() {
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const { currentUser, loading, error } = useSelector((state) => state.user);
+  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
     if (image) {
@@ -112,6 +113,16 @@ export default function Profile() {
     }
   };
 
+  useEffect(() => {
+    axios
+      .get(
+        "http://localhost:5000/api/recipe/favorites/65fc001d04db3579d60ba76a"
+      )
+      .then((data) => {
+        console.log(data);
+        setFavorites(data?.data);
+      });
+  },[]);
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex-grow">
@@ -203,6 +214,14 @@ export default function Profile() {
           <div>
             <ToastContainer />
           </div>
+          <p>Favoriler</p>
+          {favorites.map((item,i) => {
+            return (
+              <div key={i}>
+                <p>Title: {item.name}</p>
+              </div>
+            )
+          })}
         </div>
       </div>
     </div>
