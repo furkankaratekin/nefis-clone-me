@@ -35,7 +35,7 @@ router.post("/favorites/:userId/add", verifyToken, addFavoriteRecipe);
 router.delete("/favorites/:userId/remove", verifyToken, removeFavoriteRecipe);
 
 //Favorileri Listeleme
-router.get("/favorites/:userId", verifyToken, listFavorites )
+router.get("/favorites/:userId",listFavorites )
 
 
 
