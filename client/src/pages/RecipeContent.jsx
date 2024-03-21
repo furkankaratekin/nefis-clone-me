@@ -6,12 +6,16 @@ import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Bu satırı genellikle ana componentinize eklemeniz daha iyi olur
+import { useDispatch } from "react-redux";
+
 
 const RecipeContent = () => {
   const [recipe, setRecipe] = useState(null);
   const { id } = useParams(); // URL'den ID'yi almak için useParams hook'unu kullanın
   const [isFavorited, setIsFavorited] = useState(false); //Dolu boş kalp yapan snippet
-  const { currentUser} = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+
 
   useEffect(() => {
     const fetchRecipeDetails = async () => {
@@ -33,65 +37,63 @@ const RecipeContent = () => {
   }
 
   //Kalp ikonuna tıklamada değişme
-const toggleFavorite = async () => {
-  // Mevcut favori durumunu değiştir
-  setIsFavorited(!isFavorited);
+  const toggleFavorite = async () => {
+    // Mevcut favori durumunu değiştir
+    setIsFavorited(!isFavorited);
 
-  if (!isFavorited) {
-    // Favorilere ekleme işlemi
-    try {
-      const apiUrl = `http://localhost:5000/api/recipe/favorites/${currentUser._id}/add`;
-      const postData = {
-        recipeId: recipe._id,
-      };
-      await axios.post(apiUrl, postData, {
-        headers: {
-          Authorization: `Bearer ${currentUser.token}`,
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
-      toast.success("Deftere Eklendi!");
-    } catch (error) {
-      console.error("Favorilere ekleme hatası:", error);
-      toast.error("Favorilere ekleme işlemi başarısız oldu.");
-      setIsFavorited(!isFavorited);
+    if (!isFavorited) {
+      // Favorilere ekleme işlemi
+      try {
+        const apiUrl = `http://localhost:5000/api/recipe/favorites/${currentUser._id}/add`;
+        const postData = {
+          recipeId: recipe._id,
+        };
+        const tt=currentUser.token
+        await axios.post(apiUrl, postData, {
+          headers: {
+            Authorization: "Bearer "+tt,
+            Accept: "application/json",
+            "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+          },
+        });
+        toast.success("Deftere Eklendi!");
+      } catch (error) {
+        console.error("Favorilere ekleme hatası:", error);
+        toast.error("Favorilere ekleme işlemi başarısız oldu.");
+        setIsFavorited(!isFavorited);
+      }
+    } else {
+      // Favorilerden çıkarma işlemi
+      try {
+        // Favorilerden çıkarma işlemi için API URL'i
+        const apiUrl = `http://localhost:5000/api/recipe/favorites/${currentUser._id}/remove`;
+
+        // Axios DELETE isteği için gönderilecek olan veri
+        const postData = {
+          recipeId: recipe._id, // recipe._id değerini göndermek için kullanılıyor
+        };
+
+        // Axios ile DELETE isteği yapılıyor ve veri gönderiliyor
+        await axios.delete(apiUrl, {
+          data: postData, // DELETE metodunda veri 'data' özelliği ile gönderilmeli
+          headers: {
+            Authorization: `Bearer ${currentUser.token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        });
+
+        // Başarılı toast mesajı
+        toast.success("Defterden Kaldırıldı!");
+      } catch (error) {
+        // Hata durumunda konsola ve kullanıcıya hata mesajı yazdırılıyor
+        console.error("Favorilerden çıkarma hatası:", error);
+        toast.error("Favorilerden çıkarma işlemi başarısız oldu.");
+        // Çıkarma işlemi başarısız olursa, favori durumu eski haline getiriliyor
+        setIsFavorited(!isFavorited);
+      }
     }
-  } else {
-    // Favorilerden çıkarma işlemi
-    try {
-      // Favorilerden çıkarma işlemi için API URL'i
-      const apiUrl = `http://localhost:5000/api/recipe/favorites/${currentUser._id}/remove`;
-
-      // Axios DELETE isteği için gönderilecek olan veri
-      const postData = {
-        recipeId: recipe._id, // recipe._id değerini göndermek için kullanılıyor
-      };
-
-      // Axios ile DELETE isteği yapılıyor ve veri gönderiliyor
-      await axios.delete(apiUrl, {
-        data: postData, // DELETE metodunda veri 'data' özelliği ile gönderilmeli
-        headers: {
-          Authorization: `Bearer ${currentUser.token}`,
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
-
-      // Başarılı toast mesajı
-      toast.success("Defterden Kaldırıldı!");
-    } catch (error) {
-      // Hata durumunda konsola ve kullanıcıya hata mesajı yazdırılıyor
-      console.error("Favorilerden çıkarma hatası:", error);
-      toast.error("Favorilerden çıkarma işlemi başarısız oldu.");
-      // Çıkarma işlemi başarısız olursa, favori durumu eski haline getiriliyor
-      setIsFavorited(!isFavorited);
-    }
-  }
-};
-
-
-
+  };
 
   console.log(currentUser._id);
   console.log(recipe._id);

@@ -117,7 +117,6 @@ export default function Profile() {
       <div className="flex-grow">
         <div className="p-3 max-w-lg mx-auto">
           <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
-
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input
               type="file"
@@ -203,8 +202,6 @@ export default function Profile() {
           <hr />
           <div>
             <ToastContainer />
-
-
           </div>
         </div>
       </div>

@@ -2,11 +2,11 @@ import jwt from "jsonwebtoken";
 
 export const verifyToken = (req, res, next) => {
 
-  const authHeader = req.headers.authorization;
+  const authHeader = req.headers["authorization"];
   if (authHeader) {
    
     const token = authHeader.split(" ")[1];
-    console.log(token);
+    console.log("sdfjsdf" + authHeader);
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) {
