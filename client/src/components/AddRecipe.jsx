@@ -81,6 +81,31 @@ const AddComment = () => {
     }
   };
 
+  const handleDeleteComment = async (commentId) => {
+        const config = {
+          headers: { Authorization: `Bearer ${token}` },
+        };
+    try {
+      await axios.delete(
+        `http://localhost:5000/api/comment/delete-comment/${commentId}`,
+        config
+      );
+
+      toast.success("Yorum başarıyla silindi!");
+      // Silinen yorumu yorum listesinden çıkar
+      setComments((prevComments) =>
+        prevComments.filter((comment) => comment._id !== commentId)
+      );
+    } catch (error) {
+      console.error("Yorum silinirken bir hata oluştu:", error);
+      toast.error(
+        `Yorum silinirken bir sorun oluştu: ${
+          error.response ? error.response.data.message : error.message
+        }`
+      );
+    }
+  };
+
   return (
     <div>
       <ToastContainer />
@@ -108,6 +133,10 @@ const AddComment = () => {
               {comment.user_username}: {comment.comment} -{" "}
               {moment(comment.createdAt).format("YYYY-MM-DD HH:mm")}
             </p>
+            <button onClick={() => handleDeleteComment(comment._id)}>
+              Yorumu Sil
+            </button>{" "}
+            
           </div>
         ))}
       </div>
