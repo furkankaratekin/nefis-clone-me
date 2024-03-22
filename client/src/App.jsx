@@ -7,8 +7,7 @@ import Profile from "./pages/Profile";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import RecipeContent from "./pages/RecipeContent";
-import AddRecipe from "./components/AddRecipe";
-
+import AddComment from "./components/AddComment";
 function App() {
   return (
     <>
@@ -20,7 +19,7 @@ function App() {
           <Route path="/:id" element={<RecipeContent/>}></Route>
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<Signup />} />
-          <Route path="/test" element={<AddRecipe />} />
+          <Route path="/test" element={<AddComment />} />
           <Route element={<PrivateRoute />}>
             <Route path="/profile" element={<Profile />} />
           </Route>
