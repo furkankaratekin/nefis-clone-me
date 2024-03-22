@@ -13,6 +13,8 @@ const AddComment = () => {
   const token = currentUser.token; // currentUser objesinden alınıyor
   const user_username = currentUser.username;
   const user_profile_picture = currentUser.profilePicture;
+  const [editingComment, setEditingComment] = useState(""); // Düzenlenen yorumun metni için
+  const [editingCommentId, setEditingCommentId] = useState(null); // Düzenlenen yorumun ID'si için
 
   useEffect(() => {
     // Component yüklendiğinde yorum listesini çekme
@@ -82,9 +84,9 @@ const AddComment = () => {
   };
 
   const handleDeleteComment = async (commentId) => {
-        const config = {
-          headers: { Authorization: `Bearer ${token}` },
-        };
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
     try {
       await axios.delete(
         `http://localhost:5000/api/comment/delete-comment/${commentId}`,
@@ -105,6 +107,19 @@ const AddComment = () => {
       );
     }
   };
+
+  const startEditing = (commentId, currentComment) => {
+    setEditingCommentId(commentId);
+    setEditingComment(currentComment);
+  };
+
+  const saveComment = () => {
+    console.log("Yeni yorum:", editingComment, "Yorum ID:", editingCommentId);
+    // Burada gelecek aşamada yorumu güncellemek için PUT isteği atılacak
+    setEditingComment(""); // Düzenleme metnini temizle
+    setEditingCommentId(null); // Düzenlenen yorumun ID'sini temizle
+  };
+
 
   return (
     <div>
@@ -130,13 +145,32 @@ const AddComment = () => {
               style={{ width: 50, height: 50, borderRadius: "50%" }}
             />
             <p>
-              {comment.user_username}: {comment.comment} -{" "}
-              {moment(comment.createdAt).format("YYYY-MM-DD HH:mm")}
+              {comment.user_username}:{" "}
+              {editingCommentId === comment._id ? (
+                <input
+                  type="text"
+                  value={editingComment}
+                  onChange={(e) => setEditingComment(e.target.value)}
+                />
+              ) : (
+                comment.comment
+              )}{" "}
+              - {moment(comment.createdAt).format("YYYY-MM-DD HH:mm")}
             </p>
-            <button onClick={() => handleDeleteComment(comment._id)}>
-              Yorumu Sil
-            </button>{" "}
-            
+            {editingCommentId === comment._id ? (
+              <button onClick={saveComment}>Kaydet</button>
+            ) : (
+              <>
+                <button onClick={() => handleDeleteComment(comment._id)}>
+                  Yorumu Sil
+                </button>
+                <button
+                  onClick={() => startEditing(comment._id, comment.comment)}
+                >
+                  Yorumu Güncelle
+                </button>
+              </>
+            )}
           </div>
         ))}
       </div>
