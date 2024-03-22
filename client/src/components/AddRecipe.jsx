@@ -113,12 +113,50 @@ const AddComment = () => {
     setEditingComment(currentComment);
   };
 
-  const saveComment = () => {
-    console.log("Yeni yorum:", editingComment, "Yorum ID:", editingCommentId);
-    // Burada gelecek aşamada yorumu güncellemek için PUT isteği atılacak
-    setEditingComment(""); // Düzenleme metnini temizle
-    setEditingCommentId(null); // Düzenlenen yorumun ID'sini temizle
+const saveComment = async () => {
+  // Yorum güncelleme isteği için gerekli bilgiler
+  const requestBody = {
+    commentId: editingCommentId,
+    comment: editingComment,
   };
+
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
+  try {
+    const response = await axios.put(
+      "http://localhost:5000/api/comment/update-comment",
+      requestBody,
+      config
+    );
+
+    // Başarı bildirimi
+    toast.success("Yorum başarıyla güncellendi!");
+
+    // Yorum listesini güncelle
+    setComments(
+      comments.map((comment) => {
+        if (comment._id === editingCommentId) {
+          return { ...comment, comment: editingComment };
+        }
+        return comment;
+      })
+    );
+
+    // Düzenleme durumunu temizle
+    setEditingComment("");
+    setEditingCommentId(null);
+  } catch (error) {
+    console.error("Yorum güncellenirken bir hata oluştu:", error);
+    toast.error(
+      `Yorum güncellenirken bir sorun oluştu: ${
+        error.response ? error.response.data.message : error.message
+      }`
+    );
+  }
+};
+
 
 
   return (
