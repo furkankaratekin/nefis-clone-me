@@ -5,23 +5,24 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import moment from "moment"; // Tarih ve saat formatlama için moment.js kütüphanesi
 
-const AddComment = () => {
+const AddComment = (recipeId) => {
   const { currentUser } = useSelector((state) => state.user);
   const [comment, setComment] = useState("");
-  const [recipeId, setRecipeId] = useState("");
+ // const [recipeIdd, setRecipeId] = useState("");
   const [comments, setComments] = useState([]); // Yorumları saklamak için state
   const token = currentUser.token; // currentUser objesinden alınıyor
   const user_username = currentUser.username;
   const user_profile_picture = currentUser.profilePicture;
   const [editingComment, setEditingComment] = useState(""); // Düzenlenen yorumun metni için
   const [editingCommentId, setEditingCommentId] = useState(null); // Düzenlenen yorumun ID'si için
-
+  console.log(recipeId.recipeId)
+  let recipeIdd = recipeId.recipeId 
   useEffect(() => {
     // Component yüklendiğinde yorum listesini çekme
     const fetchComments = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/comment/list-comment/65f6b284b1c14dd0189e49c4",
+          `http://localhost:5000/api/comment/list-comment/${recipeIdd}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -37,13 +38,13 @@ const AddComment = () => {
   }, [token]); // token değiştiğinde useEffect'i tetikle
 
   const handleAddComment = async () => {
-    if (!comment.trim() || !recipeId.trim()) {
+    if (!comment.trim() || !recipeIdd.trim()) {
       toast.error("Tarif ID ve yorum boş bırakılamaz.");
       return;
     }
 
     const bodyParameters = {
-      recipe_id: recipeId,
+      recipe_id: recipeIdd,
       comment: comment,
       username: user_username,
       profile_picture: user_profile_picture,
@@ -72,7 +73,7 @@ const AddComment = () => {
         ...prevComments,
       ]);
       setComment(""); // Yorum eklendikten sonra input alanını temizle
-      setRecipeId(""); // Tarif ID alanını temizle
+    //  setRecipeId(""); // Tarif ID alanını temizle
     } catch (error) {
       console.error("Yorum eklerken bir hata oluştu:", error);
       toast.error(
@@ -158,16 +159,10 @@ const saveComment = async () => {
 };
 
 
-
   return (
     <div>
       <ToastContainer />
-      <input
-        type="text"
-        placeholder="Tarif ID"
-        value={recipeId}
-        onChange={(e) => setRecipeId(e.target.value)}
-      />
+
       <textarea
         placeholder="Yorumunuzu buraya yazınız..."
         value={comment}

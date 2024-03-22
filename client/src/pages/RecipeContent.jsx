@@ -7,6 +7,7 @@ import { FaHeart } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Bu satırı genellikle ana componentinize eklemeniz daha iyi olur
 import { useDispatch } from "react-redux";
+import AddComment from "../components/AddComment";
 
 
 const RecipeContent = () => {
@@ -98,7 +99,7 @@ const RecipeContent = () => {
  /*  console.log(currentUser._id);
   console.log(recipe._id);
   console.log(currentUser.token); */
-
+//console.log(id)
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">{recipe.name}</h2>
@@ -151,6 +152,10 @@ const RecipeContent = () => {
       <p className="mb-2">
         <strong>Kalori:</strong> {recipe.calorie}
       </p>
+      <div>
+        {" "}
+        <AddComment recipeId={id}></AddComment>
+      </div>
     </div>
   );
 };
