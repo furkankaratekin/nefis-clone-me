@@ -149,7 +149,7 @@ const AddRecipe = () => {
          }
   }
 
-
+console.log(recipeList)
    
   return (
     <>
@@ -235,7 +235,9 @@ const AddRecipe = () => {
         </button>
       </form>
       <hr />
-      <p className="text-sm">Eklediğiniz tarifleri görmek için lütfen sayfayı yenileyiniz.</p>
+      <p className="text-sm">
+        Eklediğiniz tarifleri görmek için lütfen sayfayı yenileyiniz.
+      </p>
 
       <h3 className="text-center mt-20 text-3xl text-red-700 underline">
         Tariflerim
@@ -243,13 +245,23 @@ const AddRecipe = () => {
 
       {recipeList.map((recipe) => (
         <div key={recipe._id}>
-          <h2>Name : {recipe.name}</h2>
+          <h2>Name: {recipe.name}</h2>
           <div>
-            <p>Görsel</p>
+            <p>Görsel:</p>
             <img src={recipe.picture} alt={recipe.name} />
           </div>
-
-          <button>Tarifi Güncelle</button>
+          <p>Calorie: {recipe.calorie}</p>
+          <p>Category: {recipe.category}</p>
+          <p>Ingredients:</p>
+          <ul>
+            {recipe.ingredients.map((ingredient, index) => (
+              <li key={index}>{ingredient}</li>
+            ))}
+          </ul>
+          <p>Recipe: {recipe.recipe}</p>
+       {/*    <p>Created At: {new Date(recipe.createdAt).toLocaleString()}</p>
+          <p>Updated At: {new Date(recipe.updatedAt).toLocaleString()}</p>
+ */}          <button>Tarifi Güncelle</button>
           <button onClick={() => handleDeleteRecipe(recipe._id)}>
             Tarifi Sil
           </button>
