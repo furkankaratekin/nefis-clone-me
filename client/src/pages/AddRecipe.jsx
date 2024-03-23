@@ -177,12 +177,55 @@ const AddRecipe = () => {
   };
 
   // Kaydet butonuna basıldığında çalışacak fonksiyon
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     console.log(editingFormData); // Güncellenmiş form verilerini console'a yaz
+    const recipeIdUpdate = editingFormData._id;
+    const reqBody = {
+     name : editingFormData.name,
+      picture: editingFormData.picture,
+      category : editingFormData.category,
+      ingredients : editingFormData.ingredients,
+      recipe : editingFormData.recipe,
+      calorie : editingFormData.calorie,
+      content_photos : editingFormData.content_photos
+    };
+
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+  try{
+    const response = await axios.put(
+      `http://localhost:5000/api/recipe/update/${recipeIdUpdate}`,
+      reqBody,
+      config
+    );
+    toast.success("Tarif başarılı ile güncellendi")
+
+
+  }catch(error){
+    toast.error("Yorumu güncellerken hata oluştu aga")
+    console.log("Yorumu güncellerken hata oluştu" + error)
+  }
+
+
     setEditingId(null); // Düzenleme modundan çık
   };
 
-   
+  //console.log(editingFormData._id)
+  /* console.log(editingFormData.name)
+  console.log(editingFormData.picture)
+  console.log(editingFormData.category)
+  console.log(editingFormData.ingredients)
+  console.log(editingFormData.recipe)
+  console.log(editingFormData.calorie)
+  console.log(editingFormData.content_photos)
+   */
+  //console.log(editingFormData.calorie)
+  //Güncelleme axios ile  yukarıdaki console.log ile güncellenenen
+  //veri konsola yazdırılabildi.
+
+
+
   return (
     <>
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -268,7 +311,7 @@ const AddRecipe = () => {
       </form>
       <hr />
       <p className="text-sm">
-        Eklediğiniz tarifleri görmek için lütfen sayfayı yenileyiniz.
+        Eklediğiniz veya güncellediğiniz tarifleri görmek için lütfen sayfayı yenileyiniz.
       </p>
       <h3 className="text-center mt-20 text-3xl text-red-700 underline">
         Tariflerim
