@@ -98,6 +98,7 @@ const AddRecipe = () => {
         config
       );
       toast.success("Yorum başarı ile eklendi");
+      
     } catch (error) {
       console.error("Yorum eklerken bir hata oluştu:", error);
       toast.error(
@@ -132,14 +133,20 @@ const AddRecipe = () => {
           headers: { Authorization: `Bearer ${token}` },
         };
 
-        try{
-            axios.delete(`http://localhost:5000/api/recipe/delete/${recipeId}`,config);
-
-            toast.success("Tarif başarıyla silindi");
-            
-        }catch(error){
-            console.log("Tarif silinirken hata oluştu" + error)
-        }
+         try {
+           await axios.delete(
+             `http://localhost:5000/api/recipe/delete/${recipeId}`,
+             config
+           );
+           toast.success("Tarif başarıyla silindi");
+           // Silme işlemi başarılı olduğunda, silinen tarifi listeden çıkar
+           setRecipeList(
+             recipeList.filter((recipe) => recipe._id !== recipeId)
+           );
+         } catch (error) {
+           console.log("Tarif silinirken hata oluştu", error);
+           toast.error("Tarif silinirken bir hata oluştu");
+         }
   }
 
 
@@ -228,9 +235,12 @@ const AddRecipe = () => {
         </button>
       </form>
       <hr />
+      <p className="text-sm">Eklediğiniz tarifleri görmek için lütfen sayfayı yenileyiniz.</p>
+
       <h3 className="text-center mt-20 text-3xl text-red-700 underline">
         Tariflerim
       </h3>
+
       {recipeList.map((recipe) => (
         <div key={recipe._id}>
           <h2>Name : {recipe.name}</h2>
@@ -240,7 +250,9 @@ const AddRecipe = () => {
           </div>
 
           <button>Tarifi Güncelle</button>
-          <button onClick={() => handleDeleteRecipe(recipe._id)}>Tarifi Sil</button>
+          <button onClick={() => handleDeleteRecipe(recipe._id)}>
+            Tarifi Sil
+          </button>
         </div>
       ))}
 
