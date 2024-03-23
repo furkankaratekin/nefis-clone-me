@@ -1,0 +1,69 @@
+const handleAddRecipe = async (event) => {
+ event.preventDefault();
+
+ // Form alanlarını kontrol et
+ if (!formData.name.trim()) {
+   toast.error("Adı alanı boş bırakılamaz!");
+   return;
+ }
+ if (!formData.category.trim()) {
+   toast.error("Kategori alanı boş bırakılamaz!");
+   return;
+ }
+ if (
+   formData.ingredients.length === 0 ||
+   formData.ingredients[0].trim() === ""
+ ) {
+   toast.error("Malzemeler alanı boş bırakılamaz!");
+   return;
+ }
+ if (!formData.recipe.trim()) {
+   toast.error("Tarif alanı boş bırakılamaz!");
+   return;
+ }
+ if (!formData.calorie.trim()) {
+   toast.error("Kalori alanı boş bırakılamaz!");
+   return;
+ }
+ if (!formData.picture.trim()) {
+   toast.error("Kapak görsel alanı boş bırakılamaz!");
+   return;
+ }
+ if (
+   formData.content_photos.length === 0 ||
+   formData.content_photos[0].trim() === ""
+ ) {
+   toast.error("İçerik Fotoğrafları alanı boş bırakılamaz!");
+   return;
+ }
+
+ const bodyParameters = {
+    name: name,
+    picture : picture,
+    category : category,
+    ingredients : ingredients,
+    recipe : recipe,
+    content_photos : content_photos,
+    calorie : calorie
+ };
+
+     const config = {
+       headers: { Authorization: `Bearer ${token}` },
+     };
+
+     try {
+       await axios.post(
+         "http://localhost:5000/api/recipe/add",
+         bodyParameters,
+         config
+       );
+       toast.success("Yorum başarı ile eklendi");
+     } catch (error) {
+       console.error("Yorum eklerken bir hata oluştu:", error);
+       toast.error(
+         `Yorum eklenirken bir sorun oluştu: ${
+           error.response ? error.response.data.message : error.message
+         }`
+       );
+     }
+}

@@ -8,6 +8,8 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import RecipeContent from "./pages/RecipeContent";
 import AddComment from "./components/AddComment";
+import AddRecipe from "./pages/AddRecipe";
+AddRecipe
 function App() {
   return (
     <>
@@ -19,7 +21,7 @@ function App() {
           <Route path="/:id" element={<RecipeContent/>}></Route>
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<Signup />} />
-          <Route path="/test" element={<AddComment />} />
+          <Route path="/test" element={<AddRecipe />} />
           <Route element={<PrivateRoute />}>
             <Route path="/profile" element={<Profile />} />
           </Route>
