@@ -38,6 +38,29 @@ const getRecipeById = async (req, res) => {
 };
 //yukarıdaki fonksiyonda eğer url'de id yazıysak ona göre tanımla
 
+//kullanıcı id'ye göre tarifleri listelel
+export const getRecipesByUserId = async (req, res) => {
+  try {
+    // Kullanıcı ID'si, req.params.id veya req.query.id üzerinden alınabilir,
+    // bu yüzden gerçek uygulama senaryonuza bağlı olarak bu kısmı uygun şekilde değiştirebilirsiniz.
+    const userId = req.params.id; // veya req.query.id;
+
+    // createdBy alanına göre filtreleme yapılıyor.
+    const recipes = await Recipe.find({ createdBy: userId });
+
+    // Eğer tarifler bulunursa, bunları JSON formatında döndür.
+    if (recipes.length > 0) {
+      res.json(recipes);
+    } else {
+      res.status(404).json({ message: "Bu kullanıcıya ait tarif bulunamadı." });
+    }
+  } catch (error) {
+    // Hata durumunda, hatayı JSON formatında döndür.
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 //Kullanıcı ID'ye göre tarif ekleme
 export const addRecipe = async (req ,res, next) =>{
   if (req.body.password) {

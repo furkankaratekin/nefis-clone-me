@@ -7,7 +7,8 @@ import {
   deleteRecipe,
   addFavoriteRecipe,
   removeFavoriteRecipe,
-  listFavorites
+  listFavorites,
+  getRecipesByUserId
 } from "../controllers/recipe.controller.js";
 import { verifyToken } from "../utils/verifyUser.js";
 
@@ -18,6 +19,9 @@ router.get("/", getAllRecipes);
 
 // Belirli bir ID'ye sahip tarifi getir
 router.get("/:id", getRecipeById);
+
+//Kullanıcı id'ye göre tarifleri listele
+router.get("/user-recipes/:id",getRecipesByUserId)
 
 // Yeni bir tarif ekle
 router.post("/add", verifyToken, addRecipe);
