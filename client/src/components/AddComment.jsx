@@ -84,6 +84,7 @@ const AddComment = (recipeId) => {
     }
   };
 
+  //Silme işlemi için
   const handleDeleteComment = async (commentId) => {
     const config = {
       headers: { Authorization: `Bearer ${token}` },
