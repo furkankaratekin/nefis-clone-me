@@ -129,7 +129,6 @@ const AddRecipe = () => {
         setRecipeList(response.data);
       } catch (error) {
         console.log("Tarifler gelirken hata oluştu", error);
-        toast.error("Tarifler listelenirken hata oluştu");
       }
     };
     fetchRecipes();

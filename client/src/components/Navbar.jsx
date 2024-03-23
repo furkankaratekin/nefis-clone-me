@@ -7,8 +7,6 @@ const Navbar = () => {
  const { currentUser } = useSelector((state) => state.user);
  return (
    <div className="bg-white p-0 sticky top-0 flex justify-between items-center">
- 
-
      {/* Avatar ve Menü */}
      <div className="flex items-center space-x-6 mr-5 ">
        {/* Menü */}
@@ -29,6 +27,10 @@ const Navbar = () => {
            )}
          </Link>
        </div>
+       <Link to="/add-recipe">
+         <button>Tarif ekle</button>
+       </Link>
+       <Link to="/menus">Menüler</Link>
      </div>
    </div>
  );
