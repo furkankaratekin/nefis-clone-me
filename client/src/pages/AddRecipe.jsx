@@ -20,6 +20,16 @@ const AddRecipe = () => {
   const token = currentUser.token;
   const [recipeList, setRecipeList] = useState([]);
   const id = currentUser._id;
+  const [editingId, setEditingId] = useState(null);
+  const [editingFormData, setEditingFormData] = useState({
+    name: "",
+    picture: "",
+    category: "",
+    ingredients: [],
+    recipe: "",
+    calorie: "",
+    content_photos: [],
+  });
 
 
   const handleChange = (event) => {
@@ -149,7 +159,29 @@ const AddRecipe = () => {
          }
   }
 
-console.log(recipeList)
+  const handleEditClick = (recipe) => {
+    setEditingId(recipe._id);
+    setEditingFormData({ ...recipe });
+  };
+
+  // Değişiklikleri kaydederken kullanılacak handleChange fonksiyonunu güncelle
+  const handleEditingChange = (event) => {
+    const { name, value } = event.target;
+    setEditingFormData({
+      ...editingFormData,
+      [name]:
+        name === "ingredients" || name === "content_photos"
+          ? value.split(",")
+          : value,
+    });
+  };
+
+  // Kaydet butonuna basıldığında çalışacak fonksiyon
+  const handleSaveClick = () => {
+    console.log(editingFormData); // Güncellenmiş form verilerini console'a yaz
+    setEditingId(null); // Düzenleme modundan çık
+  };
+
    
   return (
     <>
@@ -238,31 +270,101 @@ console.log(recipeList)
       <p className="text-sm">
         Eklediğiniz tarifleri görmek için lütfen sayfayı yenileyiniz.
       </p>
-
       <h3 className="text-center mt-20 text-3xl text-red-700 underline">
         Tariflerim
       </h3>
-
       {recipeList.map((recipe) => (
-        <div key={recipe._id}>
-          <h2>Name: {recipe.name}</h2>
-          <div>
-            <p>Görsel:</p>
-            <img src={recipe.picture} alt={recipe.name} />
-          </div>
-          <p>Calorie: {recipe.calorie}</p>
-          <p>Category: {recipe.category}</p>
-          <p>Ingredients:</p>
-          <ul>
-            {recipe.ingredients.map((ingredient, index) => (
-              <li key={index}>{ingredient}</li>
-            ))}
-          </ul>
-          <p>Recipe: {recipe.recipe}</p>
-       {/*    <p>Created At: {new Date(recipe.createdAt).toLocaleString()}</p>
-          <p>Updated At: {new Date(recipe.updatedAt).toLocaleString()}</p>
- */}          <button>Tarifi Güncelle</button>
-          <button onClick={() => handleDeleteRecipe(recipe._id)}>
+        <div key={recipe._id} className="recipe-item">
+          {editingId === recipe._id ? (
+            // Düzenleme modundayken gösterilecek alanlar
+            <div>
+              <input
+                type="text"
+                name="name"
+                value={editingFormData.name}
+                onChange={handleEditingChange}
+                className="p-2 border rounded-md"
+              />
+              <input
+                type="text"
+                name="picture"
+                value={editingFormData.picture}
+                onChange={handleEditingChange}
+                className="p-2 border rounded-md"
+              />
+              <input
+                type="text"
+                name="category"
+                value={editingFormData.category}
+                onChange={handleEditingChange}
+                className="p-2 border rounded-md"
+              />
+              <input
+                type="text"
+                name="ingredients"
+                value={editingFormData.ingredients.join(",")}
+                onChange={handleEditingChange}
+                className="p-2 border rounded-md"
+              />
+              <textarea
+                name="recipe"
+                value={editingFormData.recipe}
+                onChange={handleEditingChange}
+                className="p-2 border rounded-md"
+              />
+              <input
+                type="text"
+                name="calorie"
+                value={editingFormData.calorie}
+                onChange={handleEditingChange}
+                className="p-2 border rounded-md"
+              />
+              <input
+                type="text"
+                name="content_photos"
+                value={editingFormData.content_photos.join(",")}
+                onChange={handleEditingChange}
+                className="p-2 border rounded-md"
+              />
+              <button
+                onClick={() => handleSaveClick(recipe._id)}
+                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-700"
+              >
+                Kaydet
+              </button>
+            </div>
+          ) : (
+            // Düzenleme modu dışındayken gösterilecek olan sabit içerik
+            <div>
+              <h2>{recipe.name}</h2>
+              <img
+                src={recipe.picture}
+                alt="Recipe"
+              />
+              <p>Kategori: {recipe.category}</p>
+              <p>Malzemeler: {recipe.ingredients.join(", ")}</p>
+              <p>Tarif: {recipe.recipe}</p>
+              <p>Kalori: {recipe.calorie}</p>
+              {recipe.content_photos.map((photo, index) => (
+                <img
+                  key={index}
+                  src={photo}
+                  alt="Recipe content"
+                  style={{ width: "50px", height: "50px" }}
+                />
+              ))}
+              <button
+                onClick={() => handleEditClick(recipe)}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+              >
+                Tarifi Güncelle
+              </button>
+            </div>
+          )}
+          <button
+            onClick={() => handleDeleteRecipe(recipe._id)}
+            className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700"
+          >
             Tarifi Sil
           </button>
         </div>
@@ -274,3 +376,32 @@ console.log(recipeList)
 };
 
 export default AddRecipe;
+
+ /*      {
+        recipeList.map((recipe) => (
+          <div key={recipe._id}>
+            <h2>Name: {recipe.name}</h2>
+            <div>
+              <p>Görsel:</p>
+              <img src={recipe.picture} alt={recipe.name} />
+            </div>
+            <p>Calorie: {recipe.calorie}</p>
+            <p>Category: {recipe.category}</p>
+            <p>Ingredients:</p>
+            <ul>
+              {recipe.ingredients.map((ingredient, index) => (
+                <li key={index}>{ingredient}</li>
+              ))}
+            </ul>
+            <p>Recipe: {recipe.recipe}</p>
+            {/*    <p>Created At: {new Date(recipe.createdAt).toLocaleString()}</p>
+          <p>Updated At: {new Date(recipe.updatedAt).toLocaleString()}</p>
+
+            <button>Tarifi Güncelle</button>
+            <button onClick={() => handleDeleteRecipe(recipe._id)}>
+              Tarifi Sil
+            </button>
+          </div>
+        ));
+      }
+ */
